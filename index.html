@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Web Bán Hàng Đơn Giản</title>
+        <link rel="shortcut icon" href="Logo.png">
+    </head>
+    
+    <style>
+        /* CSS cho giao diện chung */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        /* CSS cho header */
+        header {
+            background-color: #008CBA;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        /* CSS cho menu */
+        nav {
+            background-color: #333;
+            color: white;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        /* CSS cho nội dung chính */
+        #content {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #products {
+            width: 60%;
+        }
+
+        #cart {
+            width: 40%;
+        }
+
+        .product {
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 10px;
+        }
+
+        button {
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .cart-item {
+            margin: 10px 0;
+        }
+
+        /* CSS cho giỏ hàng */
+        #cart-items {
+            list-style: none;
+            padding: 0;
+        }
+
+        /* CSS cho thanh toán */
+        #checkout {
+            margin-top: 20px;
+        }
+
+        /* CSS cho footer */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Trang Web Bán Hàng</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#">Trang Chủ</a></li>
+            <li><a href="#">Sản Phẩm</a></li>
+            <li><a href="#">Liên Hệ</a></li>
+        </ul>
+    </nav>
+    <div id="container" id="content">
+        <div id="products">
+            
+        </div>
+
+        <div id="cart">
+            <h2>Giỏ hàng</h2>
+            <ul id="cart-items">
+            </ul>
+            <p id="total">Tổng cộng: $0</p>
+            <button id="checkout" onclick="checkout()">Thanh toán</button>
+        </div>
+    </div>
+    <footer>
+        &copy; 2023 Trang Web Bán Hàng Đơn Giản
+    </footer>
+
+    <script>
+        let cart = [];
+
+        function addToCart(product, price) {
+            cart.push({ product, price });
+            updateCart();
+        }
+
+        function updateCart() {
+            const cartItems = document.getElementById("cart-items");
+            cartItems.innerHTML = "";
+            let total = 0;
+
+            cart.forEach(item => {
+                const li = document.createElement("li");
+                li.textContent = `${item.product} - $${item.price}`;
+                cartItems.appendChild(li);
+                total += item.price;
+            });
+
+            const totalElement = document.getElementById("total");
+            totalElement.textContent = `Tổng cộng: $${total}`;
+        }
+
+        function checkout() {
+            alert("Cảm ơn bạn đã thanh toán! Tổng cộng: $" + getTotalPrice());
+            cart = [];
+            updateCart();
+        }
+
+        function getTotalPrice() {
+            let total = 0;
+            cart.forEach(item => {
+                total += item.price;
+            });
+            return total;
+        }
+        window.onload = function () {
+        updateCart();
+        showProducts();
+    }
+
+    
+    </script>
+</body>
+</html>

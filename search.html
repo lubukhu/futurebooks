@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Webshop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #search-container {
+            text-align: center;
+            margin: 20px;
+        }
+
+        #search-input {
+            width: 300px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #search-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #product-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .product {
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 10px;
+            width: 200px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Webshop</h1>
+    <div id="search-container">
+        <label for="search-input">Search products:</label>
+        <input type="text" id="search-input" placeholder="Search products">
+        <button id="search-button">Search</button>
+    </div>
+    <div id="product-list"></div>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+
+    <script>
+        // Sample product data
+        const products = [
+            { id: 1, name: "Áo thun" },
+            { id: 2, name: "Giày thể thao" },
+            { id: 3, name: "Điện thoại di động" },
+            { id: 4, name: "Máy tính xách tay" },
+            { id: 5, name: "Tai nghe không dây" },
+            { id: 6, name: "Áo thun thể thao" },
+        ];
+    
+        // Create a new Fuse instance for fuzzy searching
+        const fuse = new Fuse(products, {
+            keys: ["name"],
+            threshold: 0.4, // Adjust the threshold as needed for your application
+        });
+    
+        // Function to display products
+        function displayProducts(productList) {
+            const productListContainer = document.getElementById("product-list");
+            productListContainer.innerHTML = '';
+    
+            productList.forEach(product => {
+                const productItem = document.createElement("div");
+                productItem.className = "product";
+                productItem.innerText = product.name;
+                productListContainer.appendChild(productItem);
+            });
+        }
+    
+        // Function to search products with fuzzy matching
+        function searchProducts(searchTerm) {
+            const searchResults = fuse.search(searchTerm);
+            const filteredProducts = searchResults.map(result => result.item);
+            displayProducts(filteredProducts);
+        }
+    
+        document.getElementById("search-button").addEventListener("click", () => {
+            const searchTerm = document.getElementById("search-input").value;
+            searchProducts(searchTerm);
+        });
+    
+        // Display initial products
+        displayProducts(products);
+    </script>
+    
+</body>
+</html>

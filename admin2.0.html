@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin</title>
+</head>
+<body>
+
+  <form id="productForm">
+    <label for="productName">Tên sản phẩm:</label>
+    <input type="text" id="productName" required><br>
+
+    <label for="productPrice">Giá sản phẩm:</label>
+    <input type="text" id="productPrice" required><br>
+
+    <label for="productImage">Hình ảnh sản phẩm:</label>
+    <input type="file" id="product-image" accept="image/*" required onchange="previewImage(event)">
+    <br>
+    <img id="preview-image" src="" alt="Hình ảnh sản phẩm">
+    <br>
+
+    <button type="button" id="add-product" onclick="addProduct()">Thêm</button>
+  </form>
+
+  <div id="product-list">
+    <!-- Danh sách sản phẩm sẽ được hiển thị ở đây -->
+  </div>
+
+  <script>
+    const productImageInput = document.getElementById('product-image');
+    const previewImage = document.getElementById('preview-image');
+    let productImage = ''; // Biến lưu trữ ảnh sản phẩm
+
+    productImageInput.addEventListener('change', function () {
+        const file = productImageInput.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            previewImage.src = e.target.result;
+            productImage = e.target.result; // Lưu ảnh vào biến
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+    document.getElementById('add-product').addEventListener('click', function () {
+        const productName = document.getElementById('productName').value;
+        const productPrice = document.getElementById('productPrice').value;
+
+        // Validate and process the data as needed
+        // Here, you can add the product information to a list in localStorage.
+        const product = { name: productName, price: productPrice, image: productImage };
+
+        // Get the existing product list from localStorage (if any)
+        const productList = JSON.parse(localStorage.getItem('products')) || [];
+
+        // Add the new product to the list
+        productList.push(product);
+
+        // Store the updated product list back in localStorage
+        localStorage.setItem('products', JSON.stringify(productList));
+
+        // Clear the form
+        document.getElementById('productName').value = '';
+        document.getElementById('productPrice').value = '';
+        productImageInput.value = '';
+        previewImage.src = '';
+
+        // Refresh the product list
+        refreshProductList();
+    });
+
+    function refreshProductList() {
+        const productList = JSON.parse(localStorage.getItem('products')) || '';
+        const productContainer = document.getElementById('product-list');
+
+        // Xóa danh sách sản phẩm hiện tại
+        productContainer.innerHTML = '';
+
+        // Hiển thị danh sách sản phẩm mới
+        productList.forEach((product, index) => {
+            const productElement = document.createElement('div');
+            productElement.innerHTML = `
+                <p>${product.name} - Giá: ${product.price}</p>
+                <img src="${product.image}" alt="${product.name}">
+                <button class="edit-button" data-index="${index}">Sửa</button>
+                <button class="delete-button" data-index="${index}">Xóa</button>
+                <hr>
+            `;
+            productContainer.appendChild(productElement);
+        });
+
+        // Sửa sản phẩm
+        const editButtons = document.querySelectorAll('.edit-button');
+        editButtons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                const index = event.target.getAttribute('data-index');
+                const productToEdit = productList[index];
+                // Gửi sản phẩm cần sửa qua trang sửa sản phẩm (edit.html) để thực hiện việc sửa sản phẩm
+                window.location.href = `edit.html?index=${index}`;
+            });
+        });
+
+        // Xóa sản phẩm
+        const deleteButtons = document.querySelectorAll('.delete-button');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                const index = event.target.getAttribute('data-index');
+                productList.splice(index, 1);
+                localStorage.setItem('products', JSON.stringify(productList));
+                refreshProductList();
+            });
+        });
+    }
+
+    // Gọi hàm refreshProductList để hiển thị danh sách sản phẩm khi trang admin mở lên
+    refreshProductList();
+  </script>
+</body>
+</html>

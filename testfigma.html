@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.lordicon.com/lordicon-1.2.0.js"></script>
+    <title>LordIcon on Image</title>
+    <style>
+        /* Style cho container chứa ảnh và lord-icon */
+        .container {
+            position: relative;
+            width: 300px; /* Đặt chiều rộng của container */
+        }
+
+        /* Áp dụng margin cho lord-icon */
+        #myLordIcon {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 10px; /* Khoảng cách từ mép container */
+        }
+
+        /* Style cho ảnh */
+        #myImage {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Container chứa ảnh và lord-icon -->
+<div class="container">
+    <!-- Ảnh -->
+    <img id="myImage" src="5.png" alt="Your Image">
+
+    <!-- Lord-Icon nằm ở góc trên cùng bên phải của ảnh -->
+    <lord-icon
+        id="myLordIcon"
+        src="https://cdn.lordicon.com/xyboiuok.json"
+        trigger="click"
+        style="width:50px;height:50px; cursor: pointer;">
+    </lord-icon>
+</div>
+
+<script>
+    // Biến để theo dõi trạng thái của LordIcon
+    var isAlternate = false;
+
+    // Function để thay đổi LordIcon khi click
+    function changeLordIcon() {
+        var lordIcon = document.getElementById("myLordIcon");
+
+        // Thay đổi giá trị của thuộc tính src tùy thuộc vào trạng thái hiện tại
+        if (isAlternate) {
+            lordIcon.setAttribute("src", "https://cdn.lordicon.com/ulnswmkk.json");
+        } else {
+            lordIcon.setAttribute("src", "https://cdn.lordicon.com/xyboiuok.json");
+        }
+
+        // Đảo ngược trạng thái
+        isAlternate = !isAlternate;
+    }
+
+    // Thêm sự kiện click vào LordIcon
+    document.getElementById("myLordIcon").addEventListener("click", changeLordIcon);
+</script>
+
+</body>
+</html>

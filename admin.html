@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+</head>
+<body>
+    <h1>Quản lý sản phẩm</h1>
+    <input type="text" id="productName" placeholder="Tên sản phẩm">
+    <input type="number" id="productPrice" placeholder="Giá tiền">
+    <button id="addProduct">Thêm sản phẩm</button>
+    <ul id="productList"></ul>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const productNameInput = document.getElementById("productName");
+            const productPriceInput = document.getElementById("productPrice");
+            const addProductButton = document.getElementById("addProduct");
+            const productList = document.getElementById("productList");
+
+            // Lấy danh sách sản phẩm từ localStorage khi trang được tải
+            const products = JSON.parse(localStorage.getItem("products")) || [];
+
+            // Hiển thị danh sách sản phẩm ban đầu
+            updateProductList();
+
+            // Xử lý sự kiện khi nút "Thêm sản phẩm" được nhấn
+            addProductButton.addEventListener("click", function() {
+                const productName = productNameInput.value;
+                const productPrice = parseFloat(productPriceInput.value);
+
+                if (productName && !isNaN(productPrice)) {
+                    const product = { name: productName, price: productPrice };
+                    products.push(product);
+
+                    // Lưu danh sách sản phẩm vào localStorage
+                    localStorage.setItem("products", JSON.stringify(products));
+
+                    // Cập nhật danh sách sản phẩm và xóa các trường nhập liệu
+                    updateProductList();
+                    productNameInput.value = "";
+                    productPriceInput.value = "";
+                }
+            });
+
+            // Cập nhật danh sách sản phẩm trên trang
+            function updateProductList() {
+                productList.innerHTML = "";
+
+                if (products.length === 0) {
+                    productList.innerHTML = "<p>Không có sản phẩm nào.</p>";
+                } else {
+                    products.forEach(function(product, index) {
+                        const listItem = document.createElement("li");
+                        listItem.textContent = `Sản phẩm ${index + 1}: ${product.name} - Giá: ${product.price} đồng`;
+                        productList.appendChild(listItem);
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

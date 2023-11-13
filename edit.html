@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sửa sản phẩm</title>
+</head>
+<body>
+    <h2>Sửa sản phẩm</h2>
+    <form id="edit-product-form">
+        <label for="product-name">Tên sản phẩm:</label>
+        <input type="text" id="product-name" required>
+        <br>
+        <label for="product-price">Giá tiền:</label>
+        <input type="number" id="product-price" required>
+        <br>
+        <button type="button" id="update-product">Cập nhật sản phẩm</button>
+    </form>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const index = urlParams.get('index');
+
+        const productList = JSON.parse(localStorage.getItem('products')) || [];
+        const productToEdit = productList[index];
+
+        const productNameInput = document.getElementById('product-name');
+        const productPriceInput = document.getElementById('product-price');
+
+        productNameInput.value = productToEdit.name;
+        productPriceInput.value = productToEdit.price;
+
+        document.getElementById('update-product').addEventListener('click', function () {
+            const updatedName = productNameInput.value;
+            const updatedPrice = productPriceInput.value;
+
+            // Validate and process the data as needed
+            // Update the product information in the list
+            productList[index].name = updatedName;
+            productList[index].price = updatedPrice;
+
+            // Store the updated product list back in localStorage
+            localStorage.setItem('products', JSON.stringify(productList));
+
+            // Redirect back to admin.html
+            window.location.href = 'admin.html';
+        });
